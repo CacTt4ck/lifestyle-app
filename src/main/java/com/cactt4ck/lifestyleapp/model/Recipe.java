@@ -28,6 +28,10 @@ public class Recipe {
     private Long lipids;
     private String instructions;
 
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<RecipeIngredient> ingredients;
 }

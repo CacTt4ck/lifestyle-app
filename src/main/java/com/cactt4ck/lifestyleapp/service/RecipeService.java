@@ -127,7 +127,13 @@ public class RecipeService {
 
         // Mapper les ingrédients en DTO simple
         List<IngredientQuantityDTO> ingredientQuantities = recipe.getIngredients().stream()
-                .map(ri -> new IngredientQuantityDTO(ri.getIngredient().getId(), ri.getQuantity()))
+                .map(ri -> new IngredientQuantityDTO(
+                        ri.getIngredient().getId(),
+                        ri.getIngredient().getName(),
+                        ri.getQuantity(),
+                        ri.getIngredient().getStock(),
+                        ri.getIngredient().getUnit().getSymbol()
+                ))
                 .collect(Collectors.toList());
 
         response.setIngredients(ingredientQuantities);
