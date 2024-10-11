@@ -20,34 +20,29 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    // Ajouter un nouvel ingrédient
     @PostMapping
     public ResponseEntity<Ingredient> createIngredient(@RequestBody Ingredient ingredient) {
         Ingredient newIngredient = ingredientService.addIngredient(ingredient);
         return ResponseEntity.ok(newIngredient);
     }
 
-    // Obtenir tous les ingrédients
     @GetMapping
     public List<Ingredient> getAllIngredients() {
         return ingredientService.getAllIngredients();
     }
 
-    // Obtenir un ingrédient par ID
     @GetMapping("/{id}")
     public ResponseEntity<Ingredient> getIngredientById(@PathVariable Long id) {
         Optional<Ingredient> ingredient = ingredientService.getIngredientById(id);
         return ingredient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Mettre à jour un ingrédient
     @PutMapping("/{id}")
     public ResponseEntity<Ingredient> updateIngredient(@PathVariable Long id, @RequestBody Ingredient ingredientDetails) {
         Ingredient updatedIngredient = ingredientService.updateIngredient(id, ingredientDetails);
         return ResponseEntity.ok(updatedIngredient);
     }
 
-    // Supprimer un ingrédient
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIngredient(@PathVariable Long id) {
         ingredientService.deleteIngredient(id);

@@ -7,6 +7,8 @@ import com.cactt4ck.lifestyleapp.model.dto.RecipeDTO;
 import com.cactt4ck.lifestyleapp.repository.IngredientRepository;
 import com.cactt4ck.lifestyleapp.repository.RecipeIngredientRepository;
 import com.cactt4ck.lifestyleapp.repository.RecipeRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class RecipeService {
 
-    private static final Logger log = LoggerFactory.getLogger(RecipeService.class);
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientService recipeIngredientService;
     private final RecipeIngredientRepository recipeIngredientRepository;
@@ -60,6 +62,15 @@ public class RecipeService {
 
         savedRecipe.setIngredients(recipeIngredients);
         return savedRecipe;
+    }
+
+    public Recipe addImageToRecipe(Long id, String imagePath) {
+        try {
+            recipeRepository.addImage(id, imagePath);
+        } catch (EntityNotFoundException e) {
+            log.error("Recipe not found for id: {} - {}", id, e.getMessage());
+        }
+        return recipeRepository.findById(id).get();
     }
 
     // Obtenir toutes les recettes

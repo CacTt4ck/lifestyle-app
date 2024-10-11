@@ -1,7 +1,6 @@
 package com.cactt4ck.lifestyleapp.controller;
 
 import com.cactt4ck.lifestyleapp.model.Recipe;
-import com.cactt4ck.lifestyleapp.model.RecipeIngredient;
 import com.cactt4ck.lifestyleapp.model.RecipeResponse;
 import com.cactt4ck.lifestyleapp.model.dto.IngredientDTO;
 import com.cactt4ck.lifestyleapp.model.dto.RecipeDTO;
@@ -27,7 +26,6 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<RecipeResponse> createRecipe(@RequestBody RecipeDTO recipeDTO) {
-        // Créer un nouvel objet Recipe à partir du RecipeDTO
         Recipe newRecipe = Recipe.builder()
                 .name(recipeDTO.getName())
                 .calories(recipeDTO.getCalories())
@@ -37,17 +35,14 @@ public class RecipeController {
                 .instructions(recipeDTO.getInstructions())
                 .build();
 
-        // Transformer la liste des IngredientDTO en RecipeIngredients
         List<IngredientDTO> ingredientDTOs = recipeDTO.getIngredients();
 
-        // Appeler le service pour créer la recette et associer les ingrédients
         Recipe savedRecipe = recipeService.addRecipe(newRecipe, ingredientDTOs);
         RecipeResponse response = recipeService.mapToRecipeResponse(savedRecipe);
         return ResponseEntity.ok(response);
     }
 
 
-    // Obtenir toutes les recettes
     @GetMapping
     public List<RecipeResponse> getAllRecipes() {
         List<RecipeResponse> recipeResponses = new ArrayList<>();
@@ -55,21 +50,23 @@ public class RecipeController {
         return recipeResponses;
     }
 
-    // Obtenir une recette par ID
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponse> getRecipeById(@PathVariable Long id) {
         Optional<Recipe> recipe = recipeService.getRecipeById(id);
         return recipe.map(value -> ResponseEntity.ok(recipeService.mapToRecipeResponse(value))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Mettre à jour une recette
     @PutMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
         Recipe updatedRecipe = recipeService.updateRecipe(id, recipeDTO);
         return ResponseEntity.ok(updatedRecipe);
     }
 
-    // Supprimer une recette
+    @PutMapping("/id/image")
+    public ResponseEntity<Recipe> updateRecipeImage(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
+
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
