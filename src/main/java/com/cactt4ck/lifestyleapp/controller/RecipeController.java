@@ -63,8 +63,8 @@ public class RecipeController {
     }
 
     @PutMapping("/id/image")
-    public ResponseEntity<Recipe> updateRecipeImage(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
-
+    public ResponseEntity<Recipe> updateRecipeImage(@PathVariable Long id, @RequestBody String image) {
+        return ResponseEntity.ok(this.recipeService.addImageToRecipe(id, image));
     }
 
     @DeleteMapping("/{id}")

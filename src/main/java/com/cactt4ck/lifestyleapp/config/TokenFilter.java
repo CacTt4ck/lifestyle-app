@@ -22,8 +22,13 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (request.getHeader("Authorization") == null){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Unauthorized");
+            return;
+        }
+
         String token = request.getHeader("Authorization").substring(7);
-        log.info("Token: {}", bearerToken);
 
         String encryptedBearerToken = this.encryptToken(bearerToken);
         String encryptedToken = this.encryptToken(token);
